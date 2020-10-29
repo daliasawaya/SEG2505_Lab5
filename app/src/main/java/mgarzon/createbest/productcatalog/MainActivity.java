@@ -137,16 +137,59 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateProduct(String id, String name, double price) {
 
-        Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+        //getting specified product reference
+        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("products").child(id);
+
+        //creating new product
+        Product product = new Product(id, name, price);
+        dr.setValue(product);
+
+        //success toast
+        Toast.makeText(this, "Product updated", Toast.LENGTH_LONG).show();
     }
 
     private void deleteProduct(String id) {
 
-        Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+        //getting specified product reference
+        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("products").child(id);
+
+        //removing product
+        dr.removeValue();
+
+        //success toast
+        Toast.makeText(this, "Product removed", Toast.LENGTH_LONG).show();
     }
 
     private void addProduct() {
 
-        Toast.makeText(this, "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+
+        //getting values to save
+        String name = editTextName.getText().toString().trim();
+        double price = Double.parseDouble(editTextPrice.getText().toString());
+
+        if(!TextUtils.isEmpty(name)) {
+
+            //getting unique id for this product
+            String id = databaseProducts.push().getKey();
+
+            //creating new product
+            Product product = new Product(id, name, price);
+
+            //saving product
+            databaseProducts.child(id).setValue(product);
+
+            //setting both edittexts to blank again
+            editTextName.setText("");
+            editTextPrice.setText("");
+
+            //success toast
+            Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
+        }
+        else {
+            //failure toast
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();
+        }
+
     }
 }
