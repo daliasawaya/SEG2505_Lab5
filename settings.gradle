@@ -1,2 +1,1 @@
 include ':app'
-rootProject.name = "SEG2505_Lab5"
