@@ -72,8 +72,22 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         databaseProducts.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //clearing previous list
+                products.clear();
 
+                //iterating through all the nodes
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting product
+                    Product product = postSnapshot.getValue(Product.class);
+                    //adding product to list of products
+                    products.add(product);
+                }
+
+                //creating adapter
+                ProductList productsAdapter = new ProductList(MainActivity.this, products);
+                //attaching adapter to list view
+                listViewProducts.setAdapter(productsAdapter);
             }
 
             @Override
